@@ -1,0 +1,36 @@
+{
+  "exp": 1740508670,
+  "iat": 1740508370,
+  "jti": "0a22196c-365d-4a4f-9c99-557cd678ddac",
+  "iss": "http://localhost:8080/realms/MyRealm",
+  "aud": "angular-app",
+  "sub": "f8f8afc7-ed0d-45cf-912a-6139767048e6",
+  "typ": "Bearer",
+  "azp": "angular-app",
+  "sid": "07a3bc01-c0d7-4a93-962b-c21df0798013",
+  "acr": "1",
+  "allowed-origins": [
+    "http://localhost:4200"
+  ],
+  "realm_access": {
+    "roles": [
+      "edit_po",
+      "edit_sale",
+      "view_po"
+    ]
+  },
+  "resource_access": {
+    "angular-app": {
+      "roles": [
+        "edit_po"
+      ]
+    }
+  },
+  "scope": "profile angular-client-scope email",
+  "email_verified": true,
+  "name": "karthik keyan",
+  "preferred_username": "mail2karthikkn@gmail.com",
+  "given_name": "karthik",
+  "family_name": "keyan",
+  "email": "mail2karthikkn@gmail.com"
+}
