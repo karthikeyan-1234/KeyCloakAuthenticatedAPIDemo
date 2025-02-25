@@ -1,5 +1,9 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+
+using Newtonsoft.Json.Linq;
+
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,11 +32,39 @@ builder.Services.AddAuthentication("Bearer")
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidIssuer = builder.Configuration["Keycloak:Authority"],
-            ValidAudience = builder.Configuration["Keycloak:Audience"]
+            ValidAudience = builder.Configuration["Keycloak:Audience"],
+            RoleClaimType = ClaimTypes.Role
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = context =>
+            {
+                var claimsIdentity = context.Principal!.Identity as ClaimsIdentity;
+                var claims = context.Principal!.Claims.ToList();
+
+                // Extract roles from "resource_access.angular-app.roles"
+                var resourceAccess = claims.FirstOrDefault(c => c.Type == "resource_access");
+                if (resourceAccess != null)
+                {
+                    //Deserialize the resource access claim
+                    var parsedResourceAccess = JObject.Parse(resourceAccess.Value);
+                    var angularAppRoles = parsedResourceAccess["angular-app"]?["roles"]?.ToObject<List<string>>();
+
+                    if (angularAppRoles != null)
+                    {
+                        foreach (var role in angularAppRoles)
+                        {
+                            claimsIdentity!.AddClaim(new Claim(ClaimTypes.Role,role)); // ✅ Map roles properly
+                        }
+                    }
+                }
+
+                return Task.CompletedTask;
+            }
         };
     });
 
-builder.Services.AddAuthorization();
 builder.Services.AddHttpClient();
 
 // Define a CORS policy with a name
@@ -47,6 +79,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowCredentials(); // Required for cookies/auth headers
     });
+
 });
 
 var app = builder.Build();
