@@ -11,8 +11,7 @@ namespace KeyCloakAuthenticatedAPIDemo.Controllers
 
         //View PO
         [HttpGet("GetPO")]
-        //[Authorize(Policy = "edit_po")]
-        [Authorize(Roles = "edit_po")]
+        [Authorize(Roles = "view_po")]
         public IActionResult GetPO()
         {
             var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
@@ -22,7 +21,6 @@ namespace KeyCloakAuthenticatedAPIDemo.Controllers
 
         //Edit PO
         [HttpPost("EditPO")]
-        //[Authorize(Policy = "edit_po")]
         [Authorize(Roles = "edit_po")]
         public IActionResult EditPO()
         {
