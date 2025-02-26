@@ -9,7 +9,7 @@ namespace KeyCloakAuthenticatedAPIDemo.Controllers
     public class EmployeeController : ControllerBase
     {
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = Roles.Admin)]
         public IActionResult GetEmployees()
         {
             return Ok(new[] { new { Id = 1, Name = "John Doe" }, new { Id = 2, Name = "Jane Doe" } });
