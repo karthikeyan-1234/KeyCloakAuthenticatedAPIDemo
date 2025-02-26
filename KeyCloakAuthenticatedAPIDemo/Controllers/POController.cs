@@ -14,10 +14,10 @@ namespace KeyCloakAuthenticatedAPIDemo.Controllers
         [Authorize(Roles = "view_po")]
         public IActionResult GetPO()
         {
-            var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-            return Ok(claims);
-            //return Ok(new[] { new { Id = 1, Name = "PO1" }, new { Id = 2, Name = "PO2" } });
-            }
+            //var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+            //return Ok(claims);
+            return Ok(new[] { new { Id = 1, Name = "PO1" }, new { Id = 2, Name = "PO2" } });
+        }
 
         //Edit PO
         [HttpPost("EditPO")]
